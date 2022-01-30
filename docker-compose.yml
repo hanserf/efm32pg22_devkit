@@ -1,0 +1,16 @@
+version: '3'
+
+services :
+  arm-dev:
+    user: "${UID}:${GID}"
+    image: "attent-dev:latest"
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    build: "container/." 
+    ports:
+      - "8080"
+      - "9170"
+    volumes:
+      - "./:/tmp/develop:rw"
+    working_dir: /tmp/develop
+    entrypoint: /bin/bash #/tmp/develop/build_apps.sh
