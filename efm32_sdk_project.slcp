@@ -1,0 +1,31 @@
+# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
+project_name: efm32_sdk_project
+label: efm32_sdk_project
+description: |
+  This example project shows an empty configuration that can be used as a starting point to add components and functionality.
+category: Example|Platform
+package: platform
+quality: production
+source:
+- {path: app.c}
+- {path: main.c}
+include:
+- path: ''
+  file_list:
+  - {path: app.h}
+sdk: {id: gecko_sdk, version: 3.2.2}
+toolchain_settings: []
+component:
+- {id: sl_system}
+- {id: emlib_ldma}
+- {id: device_init}
+- {id: emlib_pdm}
+- {id: emlib_timer}
+- {id: brd2503a}
+- {id: emlib_prs}
+- {id: EFM32PG22C200F512IM40}
+- {id: emlib_gpcrc}
+define:
+- {name: DEBUG_EFM}
+ui_hints: {}
+
