@@ -3,13 +3,6 @@
 # Makefile Version 7                                               #
 ####################################################################
 
-BASE_SDK_PATH = /home/s3rf/workarea-qfree/SimplicityStudio_v5/developer/sdks/gecko_sdk_suite/v3.2
-UNAME:=$(shell uname -s | sed -e 's/^\(CYGWIN\).*/\1/' | sed -e 's/^\(MINGW\).*/\1/')
-ifeq ($(UNAME),MINGW)
-# Translate "C:/super" into "/C/super" for MinGW make.
-SDK_PATH := /$(shell echo $(BASE_SDK_PATH) | sed s/://)
-endif
-SDK_PATH ?= $(BASE_SDK_PATH)
 COPIED_SDK_PATH ?= gecko_sdk_3.2.2
 
 # This uses the explicit build rules below

@@ -16,7 +16,7 @@ all: debug
 PROJECTNAME = efm32_sdk_project
 ARM_GCC_DIR_WIN = 
 ARM_GCC_DIR_OSX = 
-ARM_GCC_DIR_LINUX = /home/s3rf/workarea-qfree/SimplicityStudio_v5/developer/toolchains/gnu_arm/10.2_2020q4
+ARM_GCC_DIR_LINUX = /usr
 
 # Pre-defined definitions in this file
 ifeq ($(OS),Windows_NT)
@@ -186,3 +186,8 @@ $(OUTPUT_DIR)/%.o: %.S
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+######################################
+#Program
+######################################
+flash: $(BUILD_DIR)/debug/$(PROJECTNAME).hex
+	JLinkExe -device EFM32PG22C200F512IM40 -if SWD -speed 1000 -autoconnect 1 -CommanderScript jlink/load_build.jlink

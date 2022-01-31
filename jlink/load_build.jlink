@@ -1,0 +1,5 @@
+r
+loadfile build/debug/efm32_sdk_project.hex
+r
+g
+exit
