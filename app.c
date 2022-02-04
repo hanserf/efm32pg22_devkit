@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************/ /**
  * @file
  * @brief Top level application functions
  *******************************************************************************
@@ -14,17 +14,42 @@
  * sections of the MSLA applicable to Source Code.
  *
  ******************************************************************************/
-
-/***************************************************************************//**
+#include "em_chip.h"
+#include "em_emu.h"
+#include "src/pdm_ll.h"
+#include "src/usart0_ll.h"
+#include <em_usart.h>
+#include <stdint.h>
+/***************************************************************************/ /**
  * Initialize application.
  ******************************************************************************/
-void app_init(void)
-{
+void app_init(void) {
+    CHIP_Init();
+    pdm_ll_init();
+    initUSART0();
 }
 
-/***************************************************************************//**
+/***************************************************************************/ /**
  * App ticking function.
  ******************************************************************************/
-void app_process_action(void)
-{
+void app_process_action(void) {
+    uint32_t r_rms = 0;
+    uint32_t l_rms = 0;
+    USART_IntEnable(USART0, USART_IEN_RXDATAV);
+    eprintf("Starting Main loop\r\n");
+    for (;;) {
+        EMU_EnterEM1();
+        if (pdm_ll_handler(&r_rms, &l_rms)) {
+            if (l_rms) {
+                eprintf("L_RMS\r\n");
+            }
+            if (r_rms) {
+                eprintf("R_RMS\r\n");
+            }
+        }
+        if (uart0_ll_handler()) {
+            //parse rx uart;
+            eprintf("rx\r\n");
+        }
+    }
 }

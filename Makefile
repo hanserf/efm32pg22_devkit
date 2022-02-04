@@ -87,6 +87,7 @@ LD      = "$(ARM_GCC_DIR)/bin/arm-none-eabi-gcc"
 # Define a makefile here to add files/settings to the build.       #
 ####################################################################
 -include efm32_sdk_project.project.mak
+-include myapp_sources.mak
 
 
 ####################################################################

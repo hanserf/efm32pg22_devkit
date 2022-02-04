@@ -1,12 +1,12 @@
 version: '3'
 
-services :
+services:
   arm-dev:
     user: "${UID}:${GID}"
-    image: "attent-dev:latest"
+    image: "arm-dev:latest"
     stdin_open: true # docker run -i
-    tty: true        # docker run -t
-    build: "container/." 
+    tty: true # docker run -t
+    build: "container/."
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
     ports:
