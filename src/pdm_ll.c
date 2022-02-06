@@ -35,6 +35,7 @@
  ******************************************************************************/
 
 #include "src/pdm_ll.h"
+#include "src/bsp.h"
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "em_gpio.h"
@@ -81,16 +82,16 @@ void initPdm(void) {
     CMU_ClockSelectSet(cmuClock_PDMREF, cmuSelect_HFRCODPLL); // 19 MHz
 
     // Config GPIO and pin routing
-    GPIO_PinModeSet(gpioPortA, 0, gpioModePushPull, 1); // MIC_EN
-    GPIO_PinModeSet(gpioPortC, 6, gpioModePushPull, 0); // PDM_CLK
-    GPIO_PinModeSet(gpioPortC, 7, gpioModeInput, 0);    // PDM_DATA
-
-    GPIO_SlewrateSet(gpioPortC, 7, 7);
+    GPIO_PinModeSet(PDM_ENABLE_PORT, PDM_ENABLE_PIN, gpioModePushPull, 1); // MIC_EN
+    GPIO_PinModeSet(PDM_CLK_PORT,PDM_CLK_PIN , gpioModePushPull, 0); // PDM_CLK
+    GPIO_PinModeSet(PDM_DATA_PORT, PDM_DATA_PIN, gpioModeInput, 0);    // PDM_DATA
+    /* Set slew rate of port outputting PDM CLK from DPLL */
+    GPIO_SlewrateSet(gpioPortB, 7, 7);
 
     GPIO->PDMROUTE.ROUTEEN = GPIO_PDM_ROUTEEN_CLKPEN;
-    GPIO->PDMROUTE.CLKROUTE = (gpioPortC << _GPIO_PDM_CLKROUTE_PORT_SHIFT) | (6 << _GPIO_PDM_CLKROUTE_PIN_SHIFT);
-    GPIO->PDMROUTE.DAT0ROUTE = (gpioPortC << _GPIO_PDM_DAT0ROUTE_PORT_SHIFT) | (7 << _GPIO_PDM_DAT0ROUTE_PIN_SHIFT);
-    GPIO->PDMROUTE.DAT1ROUTE = (gpioPortC << _GPIO_PDM_DAT1ROUTE_PORT_SHIFT) | (7 << _GPIO_PDM_DAT1ROUTE_PIN_SHIFT);
+    GPIO->PDMROUTE.CLKROUTE = (PDM_CLK_PORT << _GPIO_PDM_CLKROUTE_PORT_SHIFT) | (PDM_CLK_PIN << _GPIO_PDM_CLKROUTE_PIN_SHIFT);
+    GPIO->PDMROUTE.DAT0ROUTE = (PDM_DATA_PORT << _GPIO_PDM_DAT0ROUTE_PORT_SHIFT) | (PDM_DATA_PIN << _GPIO_PDM_DAT0ROUTE_PIN_SHIFT);
+    GPIO->PDMROUTE.DAT1ROUTE = (PDM_DATA_PORT << _GPIO_PDM_DAT1ROUTE_PORT_SHIFT) | (PDM_DATA_PIN << _GPIO_PDM_DAT1ROUTE_PIN_SHIFT);
 
     // Initialize PDM registers with reset values
     PDM_Reset(PDM);
