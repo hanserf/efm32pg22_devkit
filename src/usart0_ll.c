@@ -108,14 +108,16 @@ void initUSART0(void) {
  *    The USART0 receive interrupt saves incoming characters.
  *****************************************************************************/
 void USART0_RX_IRQHandler(void) {
-    // Get the character just received
-    buffer[inpos] = USART0->RXDATA;
+    if (receive) {
+        // Get the character just received
+        buffer[inpos] = USART0->RXDATA;
 
-    // Exit loop on new line or buffer full
-    if ((buffer[inpos] == '\n') && (inpos < BUFLEN)) {
-        receive = false; // Stop receiving on CR
-    } else {
-        inpos = (inpos + 1) % BUFLEN;
+        // Exit loop on new line or buffer full
+        if ((buffer[inpos] == '\n') && (inpos < BUFLEN)) {
+            receive = false; // Stop receiving on CR
+        } else {
+            inpos = (inpos + 1) % BUFLEN;
+        }
     }
 }
 
@@ -123,13 +125,15 @@ void USART0_RX_IRQHandler(void) {
  * @brief
  *    Handler function
  *****************************************************************************/
-bool uart0_ll_handler(void) {
-    bool rc = !receive;
-    if (rc) {
+void uart0_ll_handler(void) {
+    if (!receive) {
+        /* Parse input command..*/
+        // #TODO SOMETHING USEFUL
+        eprintf("rx\r\n");
         /* Enable receive again */
+        inpos = 0;
         receive = true;
     }
-    return rc;
 }
 
 static void my_putchar(unsigned char sdbyte) {

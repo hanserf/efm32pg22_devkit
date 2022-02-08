@@ -1,9 +1,15 @@
 {
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Attach, AllowShortIfStatementsOnASingleLine: true, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4 }",
+    "editor.formatOnSave": true,
     "files.associations": {
         "sl_system_init.h": "c",
         "pdm_ll.h": "c",
         "uart0_ll.h": "c",
         "em_usart.h": "c",
-        "usart0_ll.h": "c"
+        "usart0_ll.h": "c",
+        "em_timer.h": "c",
+        "bsp.h": "c",
+        "ldma_ll.h": "c",
+        "ws2812_timer_ll.h": "c"
     }
 }

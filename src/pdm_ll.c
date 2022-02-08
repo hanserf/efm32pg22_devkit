@@ -35,18 +35,16 @@
  ******************************************************************************/
 
 #include "src/pdm_ll.h"
-#include "src/bsp.h"
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "em_gpio.h"
 #include "em_ldma.h"
 #include "em_pdm.h"
+#include "src/bsp.h"
+#include "src/ldma_ll.h"
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
-// DMA channel used for the example
-#define LDMA_CHANNEL 0
-#define LDMA_CH_MASK (1 << LDMA_CHANNEL)
 
 // Left/right buffer size
 #define BUFFER_SIZE 128
@@ -68,12 +66,34 @@ uint32_t pongBuffer[PP_BUFFER_SIZE];
 // Keeps track of previously written buffer
 bool prevBufferPing;
 static volatile bool new_event = false;
+static void initLdma(void);
+static void initPdm(void);
+static void PDM_LDMA_IRQHandler(void);
+
+static void PDM_LDMA_IRQHandler(void) {
+    uint32_t pending;
+
+    // Read interrupt source
+    pending = LDMA_IntGet();
+
+    // Clear interrupts
+    LDMA_IntClear(pending);
+    // Check for LDMA error
+    if (pending & LDMA_IF_ERROR) {
+        // Loop here to enable the debugger to see what has happened
+        while (1)
+            ;
+    }
+    new_event = true;
+    // Keep track of previously written buffer
+    prevBufferPing = !prevBufferPing;
+}
 
 /***************************************************************************/ /**
  * @brief
  *   Sets up PDM microphones
  ******************************************************************************/
-void initPdm(void) {
+static void initPdm(void) {
     PDM_Init_TypeDef pdmInit;
 
     // Set up clocks
@@ -83,8 +103,8 @@ void initPdm(void) {
 
     // Config GPIO and pin routing
     GPIO_PinModeSet(PDM_ENABLE_PORT, PDM_ENABLE_PIN, gpioModePushPull, 1); // MIC_EN
-    GPIO_PinModeSet(PDM_CLK_PORT,PDM_CLK_PIN , gpioModePushPull, 0); // PDM_CLK
-    GPIO_PinModeSet(PDM_DATA_PORT, PDM_DATA_PIN, gpioModeInput, 0);    // PDM_DATA
+    GPIO_PinModeSet(PDM_CLK_PORT, PDM_CLK_PIN, gpioModePushPull, 0);       // PDM_CLK
+    GPIO_PinModeSet(PDM_DATA_PORT, PDM_DATA_PIN, gpioModeInput, 0);        // PDM_DATA
     /* Set slew rate of port outputting PDM CLK from DPLL */
     GPIO_SlewrateSet(gpioPortB, 7, 7);
 
@@ -117,7 +137,7 @@ void initPdm(void) {
  * @brief
  *   Initialize the LDMA controller for ping-pong transfer
  ******************************************************************************/
-void initLdma(void) {
+static void initLdma(void) {
     LDMA_Init_t init = LDMA_INIT_DEFAULT;
 
     // LDMA transfers trigger on PDM Rx Data Valid
@@ -137,38 +157,20 @@ void initLdma(void) {
 
     LDMA_Init(&init);
 
-    LDMA_StartTransfer(LDMA_CHANNEL, (void *)&periTransferTx, (void *)&descLink);
+    LDMA_StartTransfer(LDMA_PDM_CHANNEL, (void *)&periTransferTx, (void *)&descLink);
 }
 
-/***************************************************************************/ /**
- * @brief
- *   LDMA IRQ handler.
- ******************************************************************************/
-void LDMA_IRQHandler(void) {
-    uint32_t pending;
-
-    // Read interrupt source
-    pending = LDMA_IntGet();
-
-    // Clear interrupts
-    LDMA_IntClear(pending);
-
-    // Check for LDMA error
-    if (pending & LDMA_IF_ERROR) {
-        // Loop here to enable the debugger to see what has happened
-        while (1)
-            ;
-    }
-    new_event = true;
-    // Keep track of previously written buffer
-    prevBufferPing = !prevBufferPing;
-}
-
-void pdm_ll_init() {
+void pdm_ll_enable(bool enable) {
     new_event = false;
-    // Initialize LDMA and PDM
-    initLdma();
-    initPdm();
+    if (enable) {
+        // Initialize LDMA and PDM
+        ldma_ll_register_irq(LDMA_IRQ_PDM, PDM_LDMA_IRQHandler);
+        initLdma();
+        initPdm();
+    } else {
+        LDMA_StopTransfer(LDMA_PDM_CHANNEL);
+        PDM_Reset(PDM);
+    }
 }
 
 /***************************************************************************/ /**

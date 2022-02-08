@@ -45,3 +45,16 @@ $(OUTPUT_DIR)/$(MY_SRC_PATH)/usart0_ll.o: $(MY_SRC_PATH)/usart0_ll.c
 CDEPS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/usart0_ll.d
 OBJS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/usart0_ll.o
 
+$(OUTPUT_DIR)/$(MY_SRC_PATH)/ws2812_timer_ll.o: $(MY_SRC_PATH)/ws2812_timer_ll.c
+	@echo 'Building ws2812_timer_ll.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(MY_SRC_PATH)/ws2812_timer_ll.c
+CDEPS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/ws2812_timer_ll.d
+OBJS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/ws2812_timer_ll.o
+
+$(OUTPUT_DIR)/$(MY_SRC_PATH)/ldma_ll.o: $(MY_SRC_PATH)/ldma_ll.c
+	@echo 'Building ldma_ll.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(MY_SRC_PATH)/ldma_ll.c
+CDEPS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/ldma_ll.d
+OBJS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/ldma_ll.o
+
+

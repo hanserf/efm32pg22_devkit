@@ -25,7 +25,7 @@
  ******************************************************************************/
 void app_init(void) {
     CHIP_Init();
-    pdm_ll_init();
+    pdm_ll_enable(true);
     initUSART0();
     eprintf("Starting Main loop\r\n");
     USART_IntEnable(USART0, USART_IEN_RXDATAV);
@@ -39,15 +39,12 @@ void app_process_action(void) {
     uint32_t l_rms = 0;
     if (pdm_ll_handler(&r_rms, &l_rms)) {
         if (l_rms) {
-            eprintf("L_RMS\r\n");
+            eprintf("L_RMS %lu\r\n", l_rms);
         }
         if (r_rms) {
-            eprintf("R_RMS\r\n");
+            eprintf("R_RMS %lu\r\n", r_rms);
         }
     }
-    if (uart0_ll_handler()) {
-            //parse rx uart;
-        eprintf("rx\r\n");
-    }
+    uart0_ll_handler();
     EMU_EnterEM1();
 }
