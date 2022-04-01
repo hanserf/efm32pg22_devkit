@@ -3,7 +3,7 @@
 # Makefile Version 7                                               #
 ####################################################################
 
-COPIED_SDK_PATH ?= gecko_sdk_3.2.2
+COPIED_SDK_PATH ?= gecko_sdk_3_2_2
 
 # This uses the explicit build rules below
 PROJECT_SOURCE_FILES =
@@ -18,12 +18,20 @@ LIB_FILES        += $(filter %.a, $(PROJECT_SOURCE_FILES))
 C_DEFS += \
  '-DDEBUG_EFM=1' \
  '-DEFM32PG22C200F512IM40=1' \
- '-DSL_COMPONENT_CATALOG_PRESENT=1'
+ '-DSL_COMPONENT_CATALOG_PRESENT=1' \
+ '-DARMV8_M'\
+ '-DARM_MATH_ARMV8MBL'\
+ '-DCPU_CORTEX_M33'
+
 
 ASM_DEFS += \
  '-DDEBUG_EFM=1' \
  '-DEFM32PG22C200F512IM40=1' \
- '-DSL_COMPONENT_CATALOG_PRESENT=1'
+ '-DSL_COMPONENT_CATALOG_PRESENT=1' \
+ '-DARMV8_M'\
+ '-DARM_MATH_ARMV8MBL' \
+ '-DCPU_CORTEX_M33'
+
 
 INCLUDES += \
  -Iconfig \

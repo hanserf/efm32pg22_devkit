@@ -1,8 +1,8 @@
-* text=auto
-*.txt text
-*.c text
-*.cpp text
-*.h text
-*.hpp text
-*.jpg binary
-*.png binary
+* text=auto eol=lf
+*.txt text eol=lf
+*.c text eol=lf
+*.cpp text eol=lf
+*.h text eol=lf
+*.hpp text eol=lf
+*.jpg binary eol=lf
+*.png binary eol=lf
