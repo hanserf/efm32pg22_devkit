@@ -62,6 +62,13 @@ $(OUTPUT_DIR)/$(MY_SRC_PATH)/ldma_ll.o: $(MY_SRC_PATH)/ldma_ll.c
 CDEPS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/ldma_ll.d
 OBJS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/ldma_ll.o
 
+
+$(OUTPUT_DIR)/$(MY_SRC_PATH)/refresh_timer_ll.o: $(MY_SRC_PATH)/refresh_timer_ll.c
+	@echo 'Building refresh_timer_ll.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(MY_SRC_PATH)/refresh_timer_ll.c
+CDEPS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/refresh_timer_ll.d
+OBJS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/refresh_timer_ll.o
+
 $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.c
 	@echo 'Building DSP math_helper.c'
 	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.c

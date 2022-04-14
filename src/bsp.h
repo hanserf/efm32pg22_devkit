@@ -30,6 +30,11 @@
 #define WS2812_PWM_OUT_PORT gpioPortA
 #define WS2812_PWM_OUT_PIN 3
 
+#define DEBUG1_PORT (gpioPortA)
+#define DEBUG1_PIN (8)
+#define DEBUG2_PORT (gpioPortA)
+#define DEBUG2_PIN (7)
+
 #define WS2812_PWM_FREQ (800000)        // 1.25us period
 #define WS2812_HIGH_BIT0_FREQ (1428572) // 0.7 us period
 #define WS2812_HIGH_BIT1_FREQ (2857143) // 0.35 us period

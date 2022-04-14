@@ -47,59 +47,32 @@
 #include <stdint.h>
 
 // Left/right buffer size
-#define BUFFER_SIZE 128
-
-// Ping-pong buffer size
-#define PP_BUFFER_SIZE 64
-
 // Buffers for left/right PCM data
-int16_t left[BUFFER_SIZE];
-int16_t right[BUFFER_SIZE];
-
-// Descriptor linked list for LDMA transfer
-LDMA_Descriptor_t descLink[2];
-
-// Buffers for ping-pong transfer
-uint32_t pingBuffer[PP_BUFFER_SIZE];
-uint32_t pongBuffer[PP_BUFFER_SIZE];
-
-// Keeps track of previously written buffer
-bool prevBufferPing;
-static volatile bool new_event = false;
-static void initLdma(void);
+float left[PDM_BUFFERSIZE];
+float right[PDM_BUFFERSIZE];
+uint32_t pdm_cntr = 0;
+bool pdm_enable = false;
 static void initPdm(void);
-static void PDM_LDMA_IRQHandler(void);
-
-static void PDM_LDMA_IRQHandler(void) {
-    uint32_t pending;
-
-    // Read interrupt source
-    pending = LDMA_IntGet();
-
-    // Clear interrupts
-    LDMA_IntClear(pending);
-    // Check for LDMA error
-    if (pending & LDMA_IF_ERROR) {
-        // Loop here to enable the debugger to see what has happened
-        while (1)
-            ;
-    }
-    new_event = true;
-    // Keep track of previously written buffer
-    prevBufferPing = !prevBufferPing;
-}
 
 /***************************************************************************/ /**
  * @brief
  *   Sets up PDM microphones
  ******************************************************************************/
 static void initPdm(void) {
-    PDM_Init_TypeDef pdmInit;
-
+    PDM_Init_TypeDef pdmInit = PDM_INIT_DEFAULT;
+    CMU_DPLLInit_TypeDef pllInit = CMU_DPLL_LFXO_TO_40MHZ;
+    CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
+    // Lock PLL to 1,411,209 Hz to achive 44,100 kHz PCM sampling rate
+    // when using 32x PDM oversampling
+    pllInit.frequency = 1411209;
+    pllInit.m = 14;
+    pllInit.n = 645;
+    while (!CMU_DPLLLock(&pllInit)) {
+        /* Wait for lock */
+    };
     // Set up clocks
     CMU_ClockEnable(cmuClock_GPIO, true);
     CMU_ClockEnable(cmuClock_PDM, true);
-    CMU_ClockSelectSet(cmuClock_PDMREF, cmuSelect_HFRCODPLL); // 19 MHz
 
     // Config GPIO and pin routing
     GPIO_PinModeSet(PDM_ENABLE_PORT, PDM_ENABLE_PIN, gpioModePushPull, 1); // MIC_EN
@@ -112,64 +85,21 @@ static void initPdm(void) {
     GPIO->PDMROUTE.CLKROUTE = (PDM_CLK_PORT << _GPIO_PDM_CLKROUTE_PORT_SHIFT) | (PDM_CLK_PIN << _GPIO_PDM_CLKROUTE_PIN_SHIFT);
     GPIO->PDMROUTE.DAT0ROUTE = (PDM_DATA_PORT << _GPIO_PDM_DAT0ROUTE_PORT_SHIFT) | (PDM_DATA_PIN << _GPIO_PDM_DAT0ROUTE_PIN_SHIFT);
     GPIO->PDMROUTE.DAT1ROUTE = (PDM_DATA_PORT << _GPIO_PDM_DAT1ROUTE_PORT_SHIFT) | (PDM_DATA_PIN << _GPIO_PDM_DAT1ROUTE_PIN_SHIFT);
-
-    // Initialize PDM registers with reset values
-    PDM_Reset(PDM);
-
-    // Configure PDM
-    pdmInit.start = true;
-    pdmInit.dsr = 32;
-    pdmInit.gain = 5;
-    pdmInit.ch0ClkPolarity = pdmCh0ClkPolarityRisingEdge;  // Normal
-    pdmInit.ch1ClkPolarity = pdmCh1ClkPolarityFallingEdge; // Invert
-    pdmInit.enableCh0Ch1Stereo = true;
-    pdmInit.fifoValidWatermark = pdmFifoValidWatermarkFour;
-    pdmInit.dataFormat = pdmDataFormatDouble16;
-    pdmInit.numChannels = pdmNumberOfChannelsTwo;
-    pdmInit.filterOrder = pdmFilterOrderFifth;
-    pdmInit.prescaler = 5;
-
     // Initialize PDM peripheral
     PDM_Init(PDM, &pdmInit);
 }
 
-/***************************************************************************/ /**
- * @brief
- *   Initialize the LDMA controller for ping-pong transfer
- ******************************************************************************/
-static void initLdma(void) {
-    LDMA_Init_t init = LDMA_INIT_DEFAULT;
-
-    // LDMA transfers trigger on PDM Rx Data Valid
-    LDMA_TransferCfg_t periTransferTx =
-        LDMA_TRANSFER_CFG_PERIPHERAL(ldmaPeripheralSignal_PDM_RXDATAV);
-
-    // Link descriptors for ping-pong transfer
-    descLink[0] = (LDMA_Descriptor_t)
-        LDMA_DESCRIPTOR_LINKREL_P2M_WORD(&PDM->RXDATA, pingBuffer,
-                                         PP_BUFFER_SIZE, 1);
-    descLink[1] = (LDMA_Descriptor_t)
-        LDMA_DESCRIPTOR_LINKREL_P2M_WORD(&PDM->RXDATA, pongBuffer,
-                                         PP_BUFFER_SIZE, -1);
-
-    // Next transfer writes to pingBuffer
-    prevBufferPing = false;
-
-    LDMA_Init(&init);
-
-    LDMA_StartTransfer(LDMA_PDM_CHANNEL, (void *)&periTransferTx, (void *)&descLink);
-}
-
 void pdm_ll_enable(bool enable) {
-    new_event = false;
+    pdm_enable = enable;
+    pdm_cntr = 0;
     if (enable) {
-        // Initialize LDMA and PDM
-        ldma_ll_register_irq(LDMA_IRQ_PDM, PDM_LDMA_IRQHandler);
-        initLdma();
+        GPIO_PinOutSet(DEBUG1_PORT, DEBUG1_PIN);
         initPdm();
     } else {
-        LDMA_StopTransfer(LDMA_PDM_CHANNEL);
+        CMU_OscillatorEnable(cmuOsc_LFXO, false, true);
         PDM_Reset(PDM);
+        GPIO->PDMROUTE.ROUTEEN = 0;
+        GPIO_PinOutClear(DEBUG1_PORT, DEBUG1_PIN);
     }
 }
 
@@ -177,35 +107,39 @@ void pdm_ll_enable(bool enable) {
  * @brief
  *   Main function
  ******************************************************************************/
-bool pdm_ll_handler(uint32_t *rms_r, uint32_t *rms_l) {
-    // After LDMA transfer completes and wakes up device from EM1,
-    // convert data from ping-pong buffers to left/right PCM data
-    int i = 0;
+bool pdm_ll_handler(uint32_t num_samples) {
     bool rc = false;
-    if (new_event) {
-        if (prevBufferPing) {
-            for (i = 0; i < PP_BUFFER_SIZE; i++) {
-                left[i] = pingBuffer[i] & 0x0000FFFF;
-                right[i] = (pingBuffer[i] >> 16) & 0x0000FFFF;
-            }
-        } else {
-            for (i = 0; i < PP_BUFFER_SIZE; i++) {
-                left[PP_BUFFER_SIZE + i] = pongBuffer[i] & 0x0000FFFF;
-                right[PP_BUFFER_SIZE + i] = (pongBuffer[i] >> 16) & 0x0000FFFF;
+    uint32_t tmp;
+    if (pdm_enable) {
+        GPIO_PinOutSet(DEBUG2_PORT, DEBUG2_PIN);
+        /* Blocking Read*/
+        if (PDM_BUFFERSIZE >= num_samples) {
+            tmp = PDM_Rx(PDM);
+            left[pdm_cntr] = (float)((tmp & 0x0000FFFF) - (32767.0)) / 32768.0;
+            right[pdm_cntr] = (float)(((tmp >> 16) & 0x0000FFFF) - (32767.0)) / 32768.0;
+            pdm_cntr++;
+            if (pdm_cntr >= num_samples) {
+                pdm_ll_enable(false);
+                GPIO_PinOutClear(DEBUG2_PORT, DEBUG2_PIN);
+                rc = true;
             }
         }
-        double l_rms = 0;
-        double r_rms = 0;
-        for (i = 0; i < BUFFER_SIZE; i++) {
-            l_rms += pow((double)left[i], 2);
-            r_rms += pow((double)right[i], 2);
-        }
-        /*calculate the mean*/
-        l_rms = l_rms / BUFFER_SIZE;
-        r_rms = r_rms / BUFFER_SIZE;
-        *rms_l = (uint32_t)sqrt(l_rms);
-        *rms_r = (uint32_t)sqrt(r_rms);
-        rc = true;
     }
     return rc;
+}
+
+void pdm_ll_calc_rms(float *rms_r, float *rms_l) {
+
+    double l_rms = 0;
+    double r_rms = 0;
+    int i = 0;
+    for (i = 0; i < PDM_BUFFERSIZE; i++) {
+        l_rms += pow((double)left[i], 2);
+        r_rms += pow((double)right[i], 2);
+    }
+    /*calculate the mean*/
+    l_rms = l_rms / PDM_BUFFERSIZE;
+    r_rms = r_rms / PDM_BUFFERSIZE;
+    *rms_l = (float)sqrt(l_rms);
+    *rms_r = (float)sqrt(r_rms);
 }

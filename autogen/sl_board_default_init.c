@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/*******************************************************************************
  * @file
  * @brief Board Default Init
  *******************************************************************************
@@ -29,12 +29,10 @@
  ******************************************************************************/
 #include "sl_board_control.h"
 
-void sl_board_default_init(void)
-{
-  sl_board_disable_sensor(SL_BOARD_SENSOR_RHT);
+void sl_board_default_init(void) {
+    sl_board_disable_sensor(SL_BOARD_SENSOR_RHT);
 
-  sl_board_disable_sensor(SL_BOARD_SENSOR_IMU);
+    sl_board_disable_sensor(SL_BOARD_SENSOR_IMU);
 
-  sl_board_disable_sensor(SL_BOARD_SENSOR_MICROPHONE);
-  
+    //sl_board_disable_sensor(SL_BOARD_SENSOR_MICROPHONE);
 }

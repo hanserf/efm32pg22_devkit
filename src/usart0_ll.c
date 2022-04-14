@@ -101,6 +101,7 @@ void initUSART0(void) {
     // Enable NVIC USART sources
     NVIC_ClearPendingIRQ(USART0_RX_IRQn);
     NVIC_EnableIRQ(USART0_RX_IRQn);
+    USART_IntEnable(USART0, USART_IEN_RXDATAV);
 }
 
 /****************************************************************************

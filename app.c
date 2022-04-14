@@ -15,36 +15,51 @@
  *
  ******************************************************************************/
 #include "em_chip.h"
+#include "em_cmu.h"
 #include "em_emu.h"
+#include "refresh_timer_ll.h"
+#include "src/bsp.h"
 #include "src/pdm_ll.h"
 #include "src/usart0_ll.h"
+#include "src/ws2812_timer_ll.h"
 #include <em_usart.h>
 #include <stdint.h>
+#define DEBUG_APP (1)
+uint32_t num_samples = PDM_BUFFERSIZE;
 /***************************************************************************/ /**
  * Initialize application.
  ******************************************************************************/
 void app_init(void) {
     CHIP_Init();
-    pdm_ll_enable(true);
+#if (DEBUG_APP == 1)
+    CMU_ClockEnable(cmuClock_GPIO, true);
+    GPIO_PinModeSet(DEBUG1_PORT, DEBUG1_PIN, gpioModePushPull, 0);
+    GPIO_PinModeSet(DEBUG1_PORT, DEBUG1_PIN, gpioModePushPull, 0);
+#endif
     initUSART0();
+    refresh_timer_ll_init();
+    ws2812_ll_init_timer();
     eprintf("Starting Main loop\r\n");
-    USART_IntEnable(USART0, USART_IEN_RXDATAV);
 }
 
 /***************************************************************************/ /**
  * App ticking function.
  ******************************************************************************/
 void app_process_action(void) {
-    uint32_t r_rms = 0;
-    uint32_t l_rms = 0;
-    if (pdm_ll_handler(&r_rms, &l_rms)) {
+    float r_rms = 0.0;
+    float l_rms = 0.0;
+    if (refresh_timer_ll_handler()) {
+        pdm_ll_enable(true);
+    }
+    if (pdm_ll_handler(num_samples)) {
+        pdm_ll_calc_rms(&r_rms, &l_rms);
         if (l_rms) {
-            eprintf("L_RMS %lu\r\n", l_rms);
+            eprintf("L_RMS %.2f\r\n", l_rms);
         }
         if (r_rms) {
-            eprintf("R_RMS %lu\r\n", r_rms);
+            eprintf("R_RMS %.2f\r\n", r_rms);
         }
+        EMU_EnterEM1();
     }
     uart0_ll_handler();
-    EMU_EnterEM1();
 }
