@@ -18,6 +18,7 @@
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "refresh_timer_ll.h"
+#include "src/audio_dsp.h"
 #include "src/bsp.h"
 #include "src/pdm_ll.h"
 #include "src/usart0_ll.h"
@@ -25,21 +26,25 @@
 #include <em_usart.h>
 #include <stdint.h>
 #define DEBUG_APP (1)
-uint32_t num_samples = PDM_BUFFERSIZE;
+static volatile uint32_t num_samples = PDM_BUFFERSIZE;
+uint32_t run_cntr = 0;
 /***************************************************************************/ /**
  * Initialize application.
  ******************************************************************************/
 void app_init(void) {
     CHIP_Init();
 #if (DEBUG_APP == 1)
+    run_cntr = 0;
     CMU_ClockEnable(cmuClock_GPIO, true);
     GPIO_PinModeSet(DEBUG1_PORT, DEBUG1_PIN, gpioModePushPull, 0);
     GPIO_PinModeSet(DEBUG1_PORT, DEBUG1_PIN, gpioModePushPull, 0);
 #endif
     initUSART0();
+    initPdm();
     refresh_timer_ll_init();
     ws2812_ll_init_timer();
     eprintf("Starting Main loop\r\n");
+    eprintf("|RUN\t||CH\t||L_RMS\t||R_RMS\t|\n");
 }
 
 /***************************************************************************/ /**
@@ -51,15 +56,13 @@ void app_process_action(void) {
     if (refresh_timer_ll_handler()) {
         pdm_ll_enable(true);
     }
-    if (pdm_ll_handler(num_samples)) {
-        pdm_ll_calc_rms(&r_rms, &l_rms);
-        if (l_rms) {
-            eprintf("L_RMS %.2f\r\n", l_rms);
+    if (pdm_ll_handler()) {
+        for (int i = 0; i < BP_CHANNELS; i++) {
+            r_rms = audio_dsp_r_get_rms_value(i);
+            l_rms = audio_dsp_l_get_rms_value(i);
+            eprintf("|%lu\t|| %d\t|| %d\t|| %d\t|\n", run_cntr, i, (uint32_t)(l_rms * 100), (uint32_t)(r_rms * 100));
         }
-        if (r_rms) {
-            eprintf("R_RMS %.2f\r\n", r_rms);
-        }
-        EMU_EnterEM1();
+        run_cntr++;
     }
     uart0_ll_handler();
 }

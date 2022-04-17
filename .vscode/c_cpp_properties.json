@@ -7,7 +7,8 @@
             ],
             "defines": [
                 "EFM32PG22",
-                "EFM32PG22C200F512IM40"
+                "EFM32PG22C200F512IM40",
+                "ARM_MATH_DSP"
             ],
             "compilerPath": "/usr/bin/arm-none-eabi-gcc",
             "cStandard": "gnu17",

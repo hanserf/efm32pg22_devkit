@@ -1,0 +1,44 @@
+
+Breakpoint=/home/serf/workarea-silabs/efm32pg22_devkit/app.c:56, State=BP_STATE_DISABLED
+Breakpoint=/home/serf/workarea-silabs/efm32pg22_devkit/app.c:60, State=BP_STATE_ON
+Breakpoint=/home/serf/workarea-silabs/efm32pg22_devkit/src/pdm_ll.c:138, State=BP_STATE_DISABLED
+Breakpoint=/home/serf/workarea-silabs/efm32pg22_devkit/src/pdm_ll.c:139, State=BP_STATE_ON
+Breakpoint=/home/serf/workarea-silabs/efm32pg22_devkit/src/pdm_ll.c:171, State=BP_STATE_DISABLED
+OpenDocument="arm_q15_to_q31.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/gecko_sdk_3_2_2/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q15_to_q31.c", Line=71
+OpenDocument="main.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/main.c", Line=19
+OpenDocument="audio_dsp.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/src/audio_dsp.c", Line=259
+OpenDocument="em_gpio.h", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/gecko_sdk_3_2_2/platform/emlib/inc/em_gpio.h", Line=1234
+OpenDocument="pdm_ll.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/src/pdm_ll.c", Line=128
+OpenDocument="startup_efm32pg22.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/gecko_sdk_3_2_2/platform/Device/SiliconLabs/EFM32PG22/Source/GCC/startup_efm32pg22.c", Line=356
+OpenDocument="usart0_ll.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/src/usart0_ll.c", Line=60
+OpenDocument="sl_device_init_nvic.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/gecko_sdk_3_2_2/platform/service/device_init/src/sl_device_init_nvic.c", Line=8
+OpenDocument="refresh_timer_ll.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/src/refresh_timer_ll.c", Line=89
+OpenDocument="em_gpio.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/gecko_sdk_3_2_2/platform/emlib/src/em_gpio.c", Line=284
+OpenDocument="app.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/app.c", Line=41
+OpenDocument="sl_event_handler.c", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/autogen/sl_event_handler.c", Line=6
+OpenDocument="core_cm33.h", FilePath="/home/serf/workarea-silabs/efm32pg22_devkit/gecko_sdk_3_2_2/platform/CMSIS/Include/core_cm33.h", Line=2167
+OpenToolbar="Debug", Floating=0, x=0, y=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=3, w=300, h=164, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=300, h=122, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=1, w=300, h=251, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
+OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=956, h=318, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0xC0
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=1, w=300, h=144, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=300, h=189, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=LEFT, x=0, y=0, w=300, h=209, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=2, w=300, h=165, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=958, h=318, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[100;100;100;100;100;100]
+TableHeader="Vector Catches", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;259;749]
+TableHeader="Local Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[100;100;100;100;105;100]
+TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[1078;100;100;100;322]
+TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[100;105;259]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[100;266;100;100]
+TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
+TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;962]
+WatchedExpression="pdm_cntr", DisplayFormat=DISPLAY_FORMAT_BINARY, Window=Watched Data 1
+WatchedExpression="pdm_block_cntr", DisplayFormat=DISPLAY_FORMAT_BINARY, Window=Watched Data 1
+WatchedExpression="r_temp", DisplayFormat=DISPLAY_FORMAT_BINARY, Window=Watched Data 1
+WatchedExpression="l_raw", DisplayFormat=DISPLAY_FORMAT_BINARY, Window=Watched Data 1
+WatchedExpression="l_temp", DisplayFormat=DISPLAY_FORMAT_BINARY, Window=Watched Data 1

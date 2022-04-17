@@ -69,9 +69,87 @@ $(OUTPUT_DIR)/$(MY_SRC_PATH)/refresh_timer_ll.o: $(MY_SRC_PATH)/refresh_timer_ll
 CDEPS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/refresh_timer_ll.d
 OBJS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/refresh_timer_ll.o
 
+
+$(OUTPUT_DIR)/$(MY_SRC_PATH)/audio_dsp.o: $(MY_SRC_PATH)/audio_dsp.c
+	@echo 'Building audio_dsp.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(MY_SRC_PATH)/audio_dsp.c
+CDEPS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/audio_dsp.d
+OBJS += $(OUTPUT_DIR)/$(MY_SRC_PATH)/audio_dsp.o
+
 $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.c
 	@echo 'Building DSP math_helper.c'
 	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.c
 CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.d
 OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Examples/ARM/arm_graphic_equalizer_example/math_helper.o
 
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/StatisticsFunctions/arm_rms_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/StatisticsFunctions/arm_rms_q31.c
+	@echo 'Building DSP arm_rms_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/StatisticsFunctions/arm_rms_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/StatisticsFunctions/arm_rms_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/StatisticsFunctions/arm_rms_q31.o
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/StatisticsFunctions/arm_rms_q31.c
+	@echo 'Building DSP arm_biquad_cascade_df1_32x64_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_q31.o
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_init_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/StatisticsFunctions/arm_biquad_cascade_df1_init_q31.c
+	@echo 'Building DSP arm_biquad_cascade_df1_init_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_init_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_init_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_init_q31.o
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_init_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_init_q31.c
+	@echo 'Building DSP arm_biquad_cascade_df1_32x64_init_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_init_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_init_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_init_q31.o
+
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q31_to_float.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q31_to_float.c
+	@echo 'Building DSP arm_q31_to_float.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q31_to_float.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q31_to_float.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q31_to_float.o
+
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.c
+	@echo 'Building DSP arm_sqrt_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.o
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_float_to_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_float_to_q31.c
+	@echo 'Building DSP arm_float_to_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_float_to_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_float_to_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_float_to_q31.o
+
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_q31.c
+	@echo 'Building DSP arm_scale_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_q31.o
+
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_q31.c
+	@echo 'Building DSP arm_biquad_cascade_df1_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_q31.o
+
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_f32.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_f32.c
+	@echo 'Building DSP arm_scale_f32.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_f32.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_f32.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/BasicMathFunctions/arm_scale_f32.o
+
+
+$(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q15_to_q31.c: $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q15_to_q31.c
+	@echo 'Building DSP arm_q15_to_q31.c'
+	$(ECHO)$(CC) $(CFLAGS) -c -o $@ $(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q15_to_q31.c
+CDEPS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q15_to_q31.d
+OBJS += $(OUTPUT_DIR)/$(COPIED_SDK_PATH)/platform/CMSIS/DSP_Lib/Source/SupportFunctions/arm_q15_to_q31.o

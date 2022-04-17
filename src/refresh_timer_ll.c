@@ -46,7 +46,7 @@
 #include <stdbool.h>
 
 // Global variables used to set top value and duty cycle of the timer
-#define PWM_FREQ 24
+#define PWM_FREQ 1
 #define PWM_TIMER TIMER1
 #define PWM_TIMER_CMU cmuClock_TIMER1
 static uint32_t topValue = 0;
@@ -86,7 +86,7 @@ void refresh_timer_ll_init(void) {
     TIMER_InitCC_TypeDef timerCCInit = TIMER_INITCC_DEFAULT;
 
     // Use PWM mode, which sets output on overflow and clears on compare events
-    timerInit.prescale = timerPrescale64;
+    timerInit.prescale = timerPrescale1024;
     timerInit.enable = false;
     timerCCInit.mode = timerCCModePWM;
     timerCCInit.cofoa = timerOutputActionToggle;
